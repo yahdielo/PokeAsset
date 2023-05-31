@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Display JSON Data</title>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="../scripts/loadData.js" type="module"></script>
+  <script src="../scripts/averageprice.js" type="module"></script>
+  <link rel="stylesheet" href="./style/index.css">
+</head>
+<body>
+  <h2>Charizard Vmax Rainbow</h2>
+  <div class="card" data-href="index.html">
+    <img src="../imgs/charizard_v_alt_art_ps10_photo.png" alt="Image">
+  </div>
+  <h4>Average Price: <parse id="average-price"></parse></h4>
+ 
+
+  <script> console.log("json_data")</script>
+  <div id="json-data"></div>
+
+  <canvas id="myChart"></canvas>
+</body>
+</html>

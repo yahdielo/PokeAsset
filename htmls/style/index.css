@@ -1,0 +1,22 @@
+.body{
+    display: grid;
+    padding: 5px;
+    grid-template-columns: repeat(5, 1fr); /* 5 columns with equal width */
+    grid-template-rows: repeat(4, 1fr); /* 4 rows with equal height */
+    grid-gap: 10px; /* Optional: gap between grid items */
+}  
+.card {
+    width: 300px;
+    height: 300px;
+    background-color: lightgray;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+  }
+  .card img {
+    max-width: 100%;
+    max-height: 100%;
+    border-radius: 10px;
+  }
