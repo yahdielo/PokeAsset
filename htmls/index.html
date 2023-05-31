@@ -9,31 +9,22 @@
   <link rel="stylesheet" href="./style/index.css">
 </head>
 <body>
-  <div id="grid1">
-    <div id="title">
-      <p>grid item 1</p>
+  <div class="grid1">
+    <div class="column">
       <h2>Charizard V alt art</h2>
+        <div class="card">
+          <img src="../imgs/charizard_v_alt_art_ps10_photo.png">
+        </div>
+      <h4>Average Price: <parse id="average-price"></parse></h4>
     </div>
-  </div>  
+  </div>
+
   
-  <div id="grid2">
-    <div class="card">
-      <p>grid item 2</p>
-      <img src="../imgs/charizard_v_alt_art_ps10_photo.png" alt="Image">
-    </div>
+  <div class="grid2">
+    <div class="chartContainer">
+      <p>grid item 4</p>
+    <canvas id="myChart"></canvas>
   </div>
-
-  <h4>Average Price: <parse id="average-price"></parse></h4>
- 
-  <div id="grid3">
-    <div id="json-data">
-      <p>grid item 3</p>
-    </div>
-  </div>
-
-  <div id="grid4">
-    <canvas id="myChart">
-    </canvas>
   </div>
 </body>
 </html>
