@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Display JSON Data</title>
+  <title>PokeAsset</title>
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="../scripts/loadData.js" type="module"></script>
@@ -9,16 +9,31 @@
   <link rel="stylesheet" href="./style/index.css">
 </head>
 <body>
-  <h2>Charizard Vmax Rainbow</h2>
-  <div class="card" data-href="index.html">
-    <img src="../imgs/charizard_v_alt_art_ps10_photo.png" alt="Image">
+  <div id="grid1">
+    <div id="title">
+      <p>grid item 1</p>
+      <h2>Charizard V alt art</h2>
+    </div>
+  </div>  
+  
+  <div id="grid2">
+    <div class="card">
+      <p>grid item 2</p>
+      <img src="../imgs/charizard_v_alt_art_ps10_photo.png" alt="Image">
+    </div>
   </div>
+
   <h4>Average Price: <parse id="average-price"></parse></h4>
  
+  <div id="grid3">
+    <div id="json-data">
+      <p>grid item 3</p>
+    </div>
+  </div>
 
-  <script> console.log("json_data")</script>
-  <div id="json-data"></div>
-
-  <canvas id="myChart"></canvas>
+  <div id="grid4">
+    <canvas id="myChart">
+    </canvas>
+  </div>
 </body>
 </html>
