@@ -8,23 +8,36 @@
   <script src="../scripts/averageprice.js" type="module"></script>
   <link rel="stylesheet" href="./style/index.css">
 </head>
+
 <body>
+ 
+    <header>
+      <div class="logo">
+        <img src="../imgs/pokeasset-logo.png" alt="Logo">
+      </div>
+      <nav>
+        <ul>
+          <li><a href="#">About Us</a></li>
+          <li><a href="#">Sign Up</a></li>
+          <li><a href="#">Documentation</a></li>
+        </ul>
+      </nav>
+    </header>
   <div class="grid1">
     <div class="column">
       <h2>Charizard V alt art</h2>
-        <div class="card">
-          <img src="../imgs/charizard_v_alt_art_ps10_photo.png">
-        </div>
+      <div class="card">
+        <img src="../imgs/charizard_v_alt_art_ps10_photo.png">
+      </div>
       <h4>Average Price: <parse id="average-price"></parse></h4>
     </div>
   </div>
 
-  
   <div class="grid2">
     <div class="chartContainer">
       <p>grid item 4</p>
-    <canvas id="myChart"></canvas>
-  </div>
+      <canvas id="myChart"></canvas>
+    </div>
   </div>
 </body>
 </html>
