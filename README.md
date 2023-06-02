@@ -39,3 +39,4 @@ Other data: https://bulbapedia.bulbagarden.net/wiki/List_of_Pok%C3%A9monur mi_by
 ## example of the data display
 
 ![CHarizard v max rainbow rare Historic prices](./imgs/chart_example.png)
+
