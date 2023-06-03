@@ -21,8 +21,8 @@ function displayJSONData() {
         datasets: [{
           label: 'Sold Prices',
           data: soldPrices,
-          borderColor: 'rgba(75, 192, 192, 1)',
-          backgroundColor: 'rgba(75, 192, 192, 0.2)',
+          borderColor: '#ffcc03',
+          backgroundColor: '#286bbd',
           tension: 0.1
         }]
       },
@@ -32,8 +32,13 @@ function displayJSONData() {
           y: {
             beginAtZero: true
           }
+        },
+        plugins: {
+          legend: {
+            position: 'bottom' // Move the legend to the bottom
+          }
         }
-      }
+      },
     });
   });
 }
