@@ -31,6 +31,6 @@ Move inside the repo and then, type in terminal:
 
 ## Example of the data display
 
-![CHarizard v max rainbow rare Historic prices](./imgs/home_page_example.png)
-![CHarizard v max rainbow rare Historic prices](./imgs/stats_page_example.png)
+![CHarizard v max rainbow rare Historic prices](./imgs/home_page.png)
+![CHarizard v max rainbow rare Historic prices](./imgs/stats_page.png)
 
