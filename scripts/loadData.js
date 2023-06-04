@@ -1,6 +1,3 @@
-
-export { displayJSONData };
-
 function displayJSONData() {
   $.getJSON('../json/data_set.json', function(data) {
     // Extract the date and sold_price values from the JSON
