@@ -23,6 +23,7 @@ def get_character_info(character_name):
             "name" : data["name"],
             "sprites" : data["sprites"]["front_default"],
         }
+    print(atributes['id'])
     sprite_img = data["sprites"]["front_default"]
     if sprite_img:
         with open(f"./imgs/{character_name}_sprite.png", "wb") as f:
@@ -32,6 +33,7 @@ def get_character_info(character_name):
         print("Failed to retrieve Charizard's sprite.")
 
     return atributes
-  
-character_data = get_character_info("bulbasaur")
+
+
+character_data = get_character_info("pikachu")
 

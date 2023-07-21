@@ -1,8 +1,12 @@
 # Python Data Scrapper
 
-The python_webscraper is a tool designed to scrape sales data for specific cards from eBay. It utilizes the BeautifulSoup library to extract the necessary information. Once the data is retrieved, the tool performs several cleaning operations. It removes unwanted objects based on non-matching titles, cleans and formats the sold dates into Datetime format, and converts the sold prices into integers for easier manipulation and analysis.
+The python_webscraper.py is a program designed to scrape sales data for specific item from eBay websites. Once the data is retrieved, the tool performs several cleaning operations. It removes unwanted objects based on non-matching titles, cleans and formats the sold dates into Datetime format, and converts the sold prices into integers for easier manipulation and analysis.
 
 Once we have obtained the desired clean data, we save it into a JSON file for storage and future reference. This JSON file serves as the data source for generating a chart in the index.html file. We use the Chart.js library to create the chart, which visually maps all the card sales based on the collected data. This chart provides a graphical representation of the sales trends and patterns for the cards.
+
+#updates to do
+ 1 - implementing the program to create a json and also saves the data in to a DB
+ and update the jquery scripts to get the needed data from de DB
 
 ## Tools
 
