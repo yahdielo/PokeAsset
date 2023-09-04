@@ -19,6 +19,7 @@ def get_sets():
         set_name = lst[i].get_text()
         set_img = lst[i].get('href')
         tcg_sets[set_name] = set_img
+        # añadirle a cada set mas info e img del set
 
     with open('tcg_sets.json', 'w') as f:
         json.dump(tcg_sets, f)
