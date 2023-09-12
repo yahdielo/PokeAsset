@@ -15,12 +15,17 @@ def number_pages(url):
     '''Function that return the number of pages'''
     r = requests.get(url)
     soup = BeautifulSoup(r.text, "html.parser")
-    lst = soup.find_all('ol')
-    print(lst)
+    pageNumber = soup.find('ol', {'class': 'pagination__items'})
+    pNumber = pageNumber.find_all('li')
 
+    for i in pNumber:
+        
+        number = i.text
+
+    return number
 # Example of how to use the function:
 # poke_name should be a string with the pokemon name
-poke_name = "pikachu"
+poke_name = "charizard"
 # card_type should be a string with the type of ultra rare and secret pokémon cards
 # example: vmax, gx, etc.
 card_type = "vmax"
@@ -31,4 +36,8 @@ psa = 10
 
 
 uri = ebay_url(poke_name, card_type, foil_type, psa)
+print(uri)
 pages = number_pages(uri)
+print(pages)
+
+#number_pages(sample2)
