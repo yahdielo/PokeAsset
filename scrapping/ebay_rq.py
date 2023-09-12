@@ -1,4 +1,5 @@
 import requests
+from bs4 import BeautifulSoup
 
 def ebay_url(poke_name, card_type, foil_type, psa_num):
     '''Function that return a url for the ebay request'''
@@ -8,9 +9,14 @@ def ebay_url(poke_name, card_type, foil_type, psa_num):
     psa_search = "psa+" + str(psa_num)
     ebay_search = poke_search + card_type_search + foil_search + psa_search
     url = f"https://www.ebay.com/sch/i.html?_from=R40&_sacat=0&LH_TitleDesc=0&_nkw={ebay_search}&rt=nc&LH_Sold=1&LH_Complete=1"
-    print(ebay_search)
-    print(url)
     return (url)
+
+def number_pages(url):
+    '''Function that return the number of pages'''
+    r = requests.get(url)
+    soup = BeautifulSoup(r.text, "html.parser")
+    lst = soup.find_all('ol')
+    print(lst)
 
 # Example of how to use the function:
 # poke_name should be a string with the pokemon name
@@ -25,3 +31,4 @@ psa = 10
 
 
 uri = ebay_url(poke_name, card_type, foil_type, psa)
+pages = number_pages(uri)
