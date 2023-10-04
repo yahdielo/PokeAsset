@@ -7,7 +7,6 @@ Once we have obtained the desired clean data, we save it into a JSON file for st
 #updates to do
  1 - implementing the program to create a json and also saves the data in to a DB
  and update the jquery scripts to get the needed data from de DB
-
 ## Tools
 
 Web Scrapping: [BeautifulSoup](https://www.crummy.com/software/BeautifulSoup/bs4/doc/)
