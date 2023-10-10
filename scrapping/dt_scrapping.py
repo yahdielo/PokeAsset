@@ -1,27 +1,39 @@
-import numpy as np
 import datetime
 import json
+from unittest import result
 import requests
 from bs4 import BeautifulSoup
-from dataDump import dump_info_alt_art
 
+""" 
+This module contains multiple function to automate the process of scrapping ebay sell data of pokemon cards.
 
-# WEBSCRAPPING FUNCTIONS
-def  get_data(url):
+@def: get_soup() pass url and retuns a soup object
+    @params: url of the ebay sells site you want to scrappe.
+    @note: we search the url of ebay sells items, where you can see all the sold items,
+    and from there we proceded to modify the request changing the items name, in to something secific like :
+    *charizard brillain star v alt art
+@def: parse() this function scrappes the sell price, date sold, and title of each element of the site.
+    @params: soup object
+@def: page_number() usually their is multiple pages of data, this function , look how many pages of content
+that site has and returns a integer.
+    @params: soup object
+"""
+
+def get_soup(url) -> str: # lets you know the return type of the function
     """
-    this module takes url as parameter, and creats a soup object
-    and returns it
+        @def: get_soup() pass url and retuns a soup object
+        @params: url of the ebay sells site you want to scappe
     """
     r = requests.get(url)
     soup = BeautifulSoup(r.text, "html.parser")
     return soup
 
-def parse(soup):
+def parse(soup): 
     """
-    this module calls find_all method in the suop object, and pass the div specific div class
-    to look in and scrappes the data, then we run inside the dict and clean elemenetns that we do not
-    want in the list, then we clean all the dates 
+        @def: parse() this function scrappes the sell price, date sold, and title of each element of the site.
+        @params: soup object
     """
+
     resutls = soup.find_all('div', {'class': 's-item__info clearfix'})
     object_list = []
     for items in resutls:
@@ -46,81 +58,41 @@ def parse(soup):
 
     return object_list
 
-# JSON FUNCTIONS
-def dump_info_alt_art(ch_card_dt):
-    with open('ch_vmax_alt_art_psa10.json', 'w') as f:
-        json.dump(ch_card_dt, f)
-
-def load_info_alt_art():
-    full_data = []
-    with open('ch_vmax_alt_art_psa10.json') as f:
-        temp = json.load(f)
-        for dict in temp:
-            full_data.append(dict)
-    return full_data
-
-# EXTRACTING DATA TO USE
-def str_to_date(str):
-    '''Function convert str to datetime.
-    The month in the string should be in spanish to work'''
-    months_dict = {'ene': 1, 'feb': 2, 'mar': 3, 'abr': 4, 'may': 5, 'jun': 6,
-                   'jul': 7, 'ago': 8, 'sep': 9, 'oct': 10, 'nov': 11, 'dic': 12 }
-    all_values = str.split(" ")
-    date = int(all_values[2])
-    if all_values[3] in months_dict.keys():
-        month = months_dict[all_values[3]]
-    year = int(all_values[4])
-    full_date = datetime.datetime(year, month, date)
-    return(full_date.strftime('%Y-%m-%d'))
-
-def sold_price(object_list):
-    '''Function that return a list with all the price_sold as float'''
-    prices = []
-    for items in object_list:
-        prices.append(float(items['sold_price']))
-    return prices
-
-def date_sold(object_list):
-    '''Function that return a list with all the date_sold as datetime'''
-    dates = []
-    for items in object_list:
-        #Convert str to datetime and append it to list
-        dates.append(str_to_date(items['date_sold']))
-    return dates
+def number_pages(soup) -> int:
+    """
+        @def: page_number() usually their is multiple pages of data, this function , look how many pages of content
+        that site has and returns a integer.
+        @params: soup object
+    """
+    pageNumber = soup.find('ol', {'class': 'pagination__items'})
+    pNumber = pageNumber.find_all('li')
+    for i in pNumber:
+        number = i.text
+    return number
 
 
-# SEARCHING VALUES
-ch_rainbow_psa10 = "charizard+vmax+rainbow+psa+10"
-ch_v_alt_art = "charizard+brilliant+star+alt+art+psa10"
-page = 0
-full_parse = []
-while page < 4:
-    print(page)
-    page += 1
-    url = f"https://www.ebay.com/sch/i.html?_from=R40&_sacat=0&LH_TitleDesc=0&_nkw={ch_v_alt_art}&rt=nc&LH_Sold=1&LH_Complete=1&_pgn={page}"
-    soup = get_data(url)
-    full_parse += parse(soup)
+def execution(object_search):
+    """ """
 
-"""
-# START OF THE PROGRAM
-dump_info_alt_art(full_parse)
-loadaded_data = load_info_alt_art()
+    url = f"https://www.ebay.com/sch/i.html?_from=R40&_sacat=0&LH_TitleDesc=0&_nkw={object_search}&rt=nc&LH_Sold=1&LH_Complete=1&_pgn=1"
 
-# DATASET TO USE
-prices = np.array(sold_price(loadaded_data))
-dates = np.array(date_sold(loadaded_data))
-data_set = np.column_stack((dates, prices))
-sorted_data = data_set[data_set[:,0].argsort()]
-x_data = sorted_data[:, 0]
-y_data = sorted_data[:, 1]
+    # when this function is called it will check number of pages of sell data
+    soup = get_soup(url)
+    nPages = int(number_pages(soup))
 
-def export_to_json(data_set, filename):
-    converted_data = data_set.tolist()
+    object_list = []
+    if nPages > 1:
+        page = 1
+        while page <= nPages:
+            newUrl = f"https://www.ebay.com/sch/i.html?_from=R40&_sacat=0&LH_TitleDesc=0&_nkw={object_search}&rt=nc&LH_Sold=1&LH_Complete=1&_pgn={page}"
+            newSoup = get_soup(newUrl)
+            object_list += parse(newSoup)
+            page += 1
+    else:
+        return parse(soup)
 
-    with open(filename, 'w') as json_file:
-        json.dump(converted_data, json_file)
+    return object_list
 
-# GRAPH CONFIG
-print(sorted_data)
-filename = 'data_set.json'
-export_to_json(sorted_data, filename)"""
+result = execution(object_search = "charizard+brilliant+star+alt+art+psa10")
+
+print(result)

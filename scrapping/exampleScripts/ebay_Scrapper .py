@@ -70,14 +70,6 @@ def sold_price(object_list):
         prices.append(float(items['sold_price']))
     return prices
 
-"""def date_sold(object_list):
-    '''Function that return a list with all the date_sold as datetime'''
-    dates = []
-    for items in object_list:
-        #Convert str to datetime and append it to list
-        dates.append(str_to_date(items['date_sold']))
-    return dates"""
-
 
 # SEARCHING VALUES
 ch_rainbow_psa10 = "charizard+vmax+rainbow+psa+10"
@@ -88,35 +80,9 @@ page = 0
 full_parse = []
 while page < 4:
     page += 1
-    url = f"https://www.ebay.com/sch/i.html?_from=R40&_sacat=0&LH_TitleDesc=0&_nkw={ch_v_alt_art}&rt=nc&LH_Sold=1&LH_Complete=1&_pgn={page}"
+    url = f"https://www.ebay.com/sch/i.html?_from=R40&_sacat=0&LH_TitleDesc=0&_nkw=charizard+brilliant+star+alt+art+psa10&rt=nc&LH_Sold=1&LH_Complete=1&_pgn={page}"
     soup = get_data(url)
     full_parse += parse(soup)
 dump_info_alt_art(full_parse)
 
 print(full_parse[2])
-"""# START OF THE PROGRAM
-dump_info_alt_art(full_parse)
-loadaded_data = load_info_alt_art()
-
-# DATASET TO USE
-prices = np.array(sold_price(loadaded_data))
-dates = np.array(date_sold(loadaded_data))
-data_set = np.column_stack((dates, prices))
-sorted_data = data_set[data_set[:,0].argsort()]
-x_data = sorted_data[:, 0]
-y_data = sorted_data[:, 1]
-
-def export_to_json(data_set, filename):
-    converted_data = data_set.tolist()
-
-    with open(filename, 'w') as json_file:
-        json.dump(converted_data, json_file)
-
-# GRAPH CONFIG
-print(dates)
-print(sorted_data)
-filename = 'data_set.json'
-export_to_json(sorted_data, filename)
-
-# CONNECTION TO FRONT-END
-"""

@@ -3,7 +3,9 @@ import requests
 
 
 def pokemon_names():
-    '''Function that get the names of all pokemon, returns a list'''
+    '''Function that get the names of all pokemon, returns a list
+        
+        Note: currently only the OG 150 pokemon names are pull'''
     response = requests.get('https://pokeapi.co/api/v2/pokemon?limit=150')
     result = response.json()
     pokemon_names = []
@@ -12,4 +14,6 @@ def pokemon_names():
         pokemon_names.append(j['name'])
     return(pokemon_names)
 
-pokemon_names()
+if __name__ == "__main__":
+   # stuff only to run when not called via 'import' here
+   pokemon_names()
