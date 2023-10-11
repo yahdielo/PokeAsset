@@ -1,8 +1,10 @@
+from ast import dump
 import datetime
 import json
 from unittest import result
 import requests
 from bs4 import BeautifulSoup
+from pokemonNames import pokemonNames
 
 """ 
 This module contains multiple function to automate the process of scrapping ebay sell data of pokemon cards.
@@ -22,7 +24,7 @@ that site has and returns a integer.
 def get_soup(url) -> str: # lets you know the return type of the function
     """
         @def: get_soup() pass url and retuns a soup object
-        @params: url of the ebay sells site you want to scappe
+        @params: url of the ebay sells site you want to scrappe
     """
     r = requests.get(url)
     soup = BeautifulSoup(r.text, "html.parser")
@@ -70,29 +72,55 @@ def number_pages(soup) -> int:
         number = i.text
     return number
 
+def dump_info(card_sell_data, fileName):
+    """thid module dumps the collected data in to a jsonfile
+        using dump
+        @params: card_sell_dara is the list containing the sells objects
+        @params: FileName is the name you want the file to have
+    """
+    with open(f'{fileName}.json', 'w') as f:
+        json.dump(card_sell_data, f)
 
-def execution(object_search):
-    """ """
+def execution(object_search) -> json:
+    """ This modules performs a full scrapping of the desire data
+        @params: object_search = "charizard+brilliant+star+alt+art+psa10"
 
-    url = f"https://www.ebay.com/sch/i.html?_from=R40&_sacat=0&LH_TitleDesc=0&_nkw={object_search}&rt=nc&LH_Sold=1&LH_Complete=1&_pgn=1"
+        function check for the number of pages containing data, of the sells,
+        if ebay has more than 1 page of sells data for that specific item, the function will loop
+        the amount of pages collecting all the data and returning it as json
+    """
+
+    url = f"https://www.ebay.com/sch/i.html?_from=R40&_nkw={object_search}&_sacat=0&LH_TitleDesc=0&LH_Sold=1&_fsrp=1"
+    
 
     # when this function is called it will check number of pages of sell data
     soup = get_soup(url)
-    nPages = int(number_pages(soup))
+    try:
+        nPages = int(number_pages(soup))
+    except:
+        print("only one page of data is avaliable")
+        object_list = parse(soup)
+        fileName = object_search.replace("+", " ")
+        dump_info(object_list, fileName)
+        return object_list
+
 
     object_list = []
     if nPages > 1:
         page = 1
         while page <= nPages:
-            newUrl = f"https://www.ebay.com/sch/i.html?_from=R40&_sacat=0&LH_TitleDesc=0&_nkw={object_search}&rt=nc&LH_Sold=1&LH_Complete=1&_pgn={page}"
+            #this current url is for the 1st edition
+            newUrl = f"https://www.ebay.com/sch/i.html?_from=R40&_nkw={object_search}&_sacat=0&LH_TitleDesc=0&LH_Sold=1&_fsrp={page}"
+            newnew="https://www.ebay.com/sch/i.html?_from=R40&_nkw=1999+charmeleon+shadowless+1st+edition+psa10&_sacat=0&LH_TitleDesc=0&LH_Sold=1&_fsrp=1"
             newSoup = get_soup(newUrl)
             object_list += parse(newSoup)
+            fileName = object_search.replace("+", " ")
+            dump(object_list, fileName)
             page += 1
-    else:
-        return parse(soup)
 
-    return object_list
+    return f"Data was scrapped and file creates for {fileName}"
 
-result = execution(object_search = "charizard+brilliant+star+alt+art+psa10")
+# the first run is to collect data from all 150 pokemonsbase set first edition cards
+result = execution(object_search = "1999+charmeleon+shadowless+1st+edition+psa10")
 
 print(result)
