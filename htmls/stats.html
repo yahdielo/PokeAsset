@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>PokeAsset</title>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="../JS_scripts/loadData.js" type="module"></script>
+  <script src="../JS_scripts/averageprice.js" type="module"></script>
+  <link rel="stylesheet" href="./style/stats_style/common.css">
+  <link rel="stylesheet" href="./style/stats_style/header.css">
+  <link rel="stylesheet" href="./style/stats_style/container.css">
+</head>
+<body>
+    <header>
+      <div class="logo">
+        <img src="../imgs/pokeasset-logo.png" alt="Logo">
+      </div>
+      <nav>
+        <ul>
+          <li><a href="#">Home</a></li>
+          <li><a href="#">About Us</a></li>
+          <li><a href="#">Documentation</a></li>
+        </ul>
+      </nav>
+    </header>
+  <div class="container">
+  
+  <div class="column">
+    <h1>Charizard V alt art</h1>
+    <div class="card">
+      <img src="../imgs/charizard_v_alt_art_ps10_photo.png">
+    </div>
+    <h3>Average Price</h3>
+    <h4>$<parse id="average-price"></parse></h4>
+  </div>
+
+  <div class="chart">
+    <div class="chartContainer">
+      <canvas id="myChart"></canvas>
+    </div>
+  </div>
+  </div>
+</body>
+</html>

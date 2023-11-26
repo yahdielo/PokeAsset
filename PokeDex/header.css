@@ -1,0 +1,41 @@
+/* Update the header styles */
+header {
+    background-color: #f44336; /* Set a red background color */
+    color: white; /* Set text color to white */
+    padding: 10px;
+    border-radius: 10px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2); /* Add a subtle box shadow */
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  
+  /* Update the logo styles */
+  .logo img {
+    width: auto;
+    height: 100px;
+  }
+  
+  /* Update the navigation styles */
+  nav ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+  }
+  
+  nav ul li:not(:last-child) {
+    margin-right: 10px; /* Updated: apply margin to all list items except the last one */
+  }
+  
+  nav ul li a {
+    color: white;
+    font-size:large;
+    text-decoration: none;
+    padding: 5px 10px;
+  }
+  
+  nav ul li a:hover {
+    background-color: #ffcc03;
+    border-radius: 5px;
+  }

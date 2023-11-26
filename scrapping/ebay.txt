@@ -1,0 +1,19 @@
+Information about ebay url (query)
+
+_from=R40: This parameter specifies the eBay category that you want to search in. In this case, the category is "R40", which is Collectibles > Pokemon.
+
+_sacat=0: This parameter specifies that you want to search in all subcategories of the specified category.
+
+LH_TitleDesc=0: This parameter specifies that you only want to see results that match the title or description of the item.
+
+_nkw=charizard+brilliant+star+alt+art+psa10: This parameter specifies the keywords that you want to search for. In this case, the keywords are "charizard", "brilliant star", "alt art", and "psa10".
+
+rt=nc: This parameter specifies that you only want to see results that are not currently for sale.
+
+LH_Sold=1: This parameter specifies that you only want to see results that have been sold.
+
+LH_Complete=1: This parameter specifies that you only want to see results that are complete listings.
+
+_pgn=1: This parameter specifies that you want to view the first page of results.
+
+_ipg=240: This parameter specifies that you want to view 240 results per page.

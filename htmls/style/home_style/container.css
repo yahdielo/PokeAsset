@@ -1,0 +1,44 @@
+.container {
+    background-color: white; /* Set a white background color for the container */
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2); /* Add a subtle box shadow */
+    display: flex;
+}
+.column {
+    text-align: center;
+    align-self: center;
+    color: #286bbd;
+}
+.column h1 {
+    font-size: 5em;
+    font-family: Arial;
+    margin: 0%;
+    padding: 0%;
+}
+.column h4 {
+    margin: 1%;
+    margin-bottom: 2%;
+    padding: 0%;
+}
+.card {
+    width: 20%;
+    height: 80%;
+    display:grid;
+    margin: auto;
+    justify-content: center;
+    align-items: center;
+    background-color: #ffcc03; /* Set a yellow background color */
+    padding: 10px;
+    border-radius: 10px;
+    cursor: pointer;
+}
+.card img {
+    max-width: 100%;
+    max-height: 100%;
+    border-radius: 10px;
+}
+.card h4 {
+    margin: 0%;
+    padding: 0%;
+}
