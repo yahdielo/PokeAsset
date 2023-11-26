@@ -121,6 +121,6 @@ def execution(object_search) -> json:
     return f"Data was scrapped and file creates for {fileName}"
 
 # the first run is to collect data from all 150 pokemonsbase set first edition cards
-result = execution(object_search = "1999+charmeleon+shadowless+1st+edition+psa10")
+result = execution(object_search = "charizard+shadowless+1st+edition+psa10")
 
 print(result)
