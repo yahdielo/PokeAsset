@@ -38,6 +38,7 @@ def parse(soup):
 
     resutls = soup.find_all('div', {'class': 's-item__info clearfix'})
     object_list = []
+    count = 0
     for items in resutls:
 
         product = {
@@ -46,8 +47,9 @@ def parse(soup):
             'sold_price' : items.find('span', {'class': 's-item__price'}).text.replace('USD', '').replace('$', '')
         }
         object_list.append(product)
+        count += 1
 
-    for item in object_list.copy():
+    for item in object_list:
         if item.get('title') == "Shop on eBay":
             object_list.remove(item)
             break
@@ -58,6 +60,7 @@ def parse(soup):
         date = clean_date.replace("</span>", "")
         item['date_sold'] = date
 
+    print(count)
     return object_list
 
 def number_pages(soup) -> int:
@@ -67,9 +70,14 @@ def number_pages(soup) -> int:
         @params: soup object
     """
     pageNumber = soup.find('ol', {'class': 'pagination__items'})
+    print(pageNumber)
     pNumber = pageNumber.find_all('li')
     for i in pNumber:
+
         number = i.text
+        print(f"this is i.text: {number}")
+
+
     return number
 
 def dump_info(card_sell_data, fileName):
@@ -90,7 +98,7 @@ def execution(object_search) -> json:
         the amount of pages collecting all the data and returning it as json
     """
 
-    url = f"https://www.ebay.com/sch/i.html?_from=R40&_nkw={object_search}&_sacat=0&LH_TitleDesc=0&LH_Sold=1&_fsrp=1"
+    url = f"https://www.ebay.com/sch/i.html?_from=R40&_nkw={object_search}&_sacat=0&LH_TitleDesc=0&Grade=10&_oaa=1&_dcat=183454&LH_BO=1&rt=nc&LH_Sold=1&LH_Complete=1&_pgn=1"
     
 
     # when this function is called it will check number of pages of sell data
@@ -108,19 +116,20 @@ def execution(object_search) -> json:
     object_list = []
     if nPages > 1:
         page = 1
-        while page <= nPages:
+        print(nPages)
+        for page in range(1, nPages + 1):
             #this current url is for the 1st edition
-            newUrl = f"https://www.ebay.com/sch/i.html?_from=R40&_nkw={object_search}&_sacat=0&LH_TitleDesc=0&LH_Sold=1&_fsrp={page}"
-            newnew="https://www.ebay.com/sch/i.html?_from=R40&_nkw=1999+charmeleon+shadowless+1st+edition+psa10&_sacat=0&LH_TitleDesc=0&LH_Sold=1&_fsrp=1"
+            newUrl = f"https://www.ebay.com/sch/i.html?_from=R40&_nkw={object_search}&_sacat=0&LH_TitleDesc=0&Grade=10&_oaa=1&_dcat=183454&LH_BO=1&rt=nc&LH_Sold=1&LH_Complete=1&_pgn={page}"
+            #newnew="https://www.ebay.com/sch/i.html?_from=R40&_nkw=1999+charmeleon+shadowless+1st+edition+psa10&_sacat=0&LH_TitleDesc=0&LH_Sold=1&_fsrp=1"
             newSoup = get_soup(newUrl)
-            object_list += parse(newSoup)
-            fileName = object_search.replace("+", " ")
-            dump(object_list, fileName)
-            page += 1
+            object_list.append(parse(newSoup))
+            #page += 1
 
+        fileName = object_search.replace("+", " ")
+        dump_info(object_list, fileName)
     return f"Data was scrapped and file creates for {fileName}"
 
 # the first run is to collect data from all 150 pokemonsbase set first edition cards
-result = execution(object_search = "charizard+shadowless+1st+edition+psa10")
+result = execution(object_search = "charizard+vmax+rainbow+psa+10")
 
 print(result)
