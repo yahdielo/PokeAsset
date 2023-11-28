@@ -1,7 +1,8 @@
-from ast import dump
 import datetime
 import json
+from ast import dump
 from unittest import result
+
 import requests
 from bs4 import BeautifulSoup
 from pokemonNames import pokemonNames
@@ -14,12 +15,34 @@ This module contains multiple function to automate the process of scrapping ebay
     @note: we search the url of ebay sells items, where you can see all the sold items,
     and from there we proceded to modify the request changing the items name, in to something secific like :
     *charizard brillain star v alt art
+
 @def: parse() this function scrappes the sell price, date sold, and title of each element of the site.
     @params: soup object
-@def: page_number() usually their is multiple pages of data, this function , look how many pages of content
+
+@def: number_pages() usually their is multiple pages of data, this function , look how many pages of content
 that site has and returns a integer.
     @params: soup object
+
+@def: execution() function execute the whole process of getting the soup element, parsing the data
+                    and dumping the sell data into a json file
+    @params: object seach meaning the name and edition of the card
+    @example: charizard+vmax+rainbow+psa+10
 """
+def url_builder(poke_name, card_type, foil_type, psa_num) -> list:
+    '''Function that return a url for the ebay request
+        poke_name = "charizard"
+        card_type = "vmax"
+        foil_type = "rainbow"
+    '''
+    poke_search = poke_name + "+"
+    card_type_search = card_type + "+"
+    foil_search = foil_type + "+"
+    psa_search = "psa+" + str(psa_num)
+    object_search = poke_search + card_type_search + foil_search + psa_search
+    url = f"https://www.ebay.com/sch/i.html?_from=R40&_nkw=c{object_search}&_sacat=0&LH_TitleDesc=0&Grade=10&_oaa=1&_dcat=183454&LH_BO=1&rt=nc&LH_Sold=1&LH_Complete=1"
+    object_search = object_search.replace("+", "_")
+    return [object_search, url]
+
 
 def get_soup(url) -> str: # lets you know the return type of the function
     """
@@ -29,6 +52,7 @@ def get_soup(url) -> str: # lets you know the return type of the function
     r = requests.get(url)
     soup = BeautifulSoup(r.text, "html.parser")
     return soup
+
 
 def parse(soup): 
     """
@@ -50,7 +74,7 @@ def parse(soup):
         count += 1
 
     for item in object_list:
-        if item.get('title') == "Shop on eBay":
+        if item.get('title') == "Shop on eBay": # if this element exist remove it
             object_list.remove(item)
             break
 
@@ -60,7 +84,6 @@ def parse(soup):
         date = clean_date.replace("</span>", "")
         item['date_sold'] = date
 
-    print(count)
     return object_list
 
 def number_pages(soup) -> int:
@@ -70,13 +93,10 @@ def number_pages(soup) -> int:
         @params: soup object
     """
     pageNumber = soup.find('ol', {'class': 'pagination__items'})
-    print(pageNumber)
     pNumber = pageNumber.find_all('li')
     for i in pNumber:
 
         number = i.text
-        print(f"this is i.text: {number}")
-
 
     return number
 
@@ -89,7 +109,7 @@ def dump_info(card_sell_data, fileName):
     with open(f'{fileName}.json', 'w') as f:
         json.dump(card_sell_data, f)
 
-def execution(object_search) -> json:
+def execution(poke_name, card_type, foil_type, psa_num) -> json:
     """ This modules performs a full scrapping of the desire data
         @params: object_search = "charizard+brilliant+star+alt+art+psa10"
 
@@ -98,9 +118,8 @@ def execution(object_search) -> json:
         the amount of pages collecting all the data and returning it as json
     """
 
-    url = f"https://www.ebay.com/sch/i.html?_from=R40&_nkw={object_search}&_sacat=0&LH_TitleDesc=0&Grade=10&_oaa=1&_dcat=183454&LH_BO=1&rt=nc&LH_Sold=1&LH_Complete=1&_pgn=1"
+    fileName, url = url_builder(poke_name, card_type, foil_type, psa_num)
     
-
     # when this function is called it will check number of pages of sell data
     soup = get_soup(url)
     try:
@@ -108,28 +127,25 @@ def execution(object_search) -> json:
     except:
         print("only one page of data is avaliable")
         object_list = parse(soup)
-        fileName = object_search.replace("+", " ")
         dump_info(object_list, fileName)
         return object_list
 
 
     object_list = []
+    url = f"{url}&_pgn="
     if nPages > 1:
         page = 1
-        print(nPages)
         for page in range(1, nPages + 1):
             #this current url is for the 1st edition
-            newUrl = f"https://www.ebay.com/sch/i.html?_from=R40&_nkw={object_search}&_sacat=0&LH_TitleDesc=0&Grade=10&_oaa=1&_dcat=183454&LH_BO=1&rt=nc&LH_Sold=1&LH_Complete=1&_pgn={page}"
-            #newnew="https://www.ebay.com/sch/i.html?_from=R40&_nkw=1999+charmeleon+shadowless+1st+edition+psa10&_sacat=0&LH_TitleDesc=0&LH_Sold=1&_fsrp=1"
+            newUrl = f"{url}{page}"
+            print(newUrl)
             newSoup = get_soup(newUrl)
             object_list.append(parse(newSoup))
-            #page += 1
 
-        fileName = object_search.replace("+", " ")
         dump_info(object_list, fileName)
     return f"Data was scrapped and file creates for {fileName}"
 
 # the first run is to collect data from all 150 pokemonsbase set first edition cards
-result = execution(object_search = "charizard+vmax+rainbow+psa+10")
+result = execution("charizard","vmax", "rainbow", 10)
 
 print(result)
