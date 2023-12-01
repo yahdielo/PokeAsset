@@ -1,8 +1,5 @@
-import datetime
+from datetime import datetime
 import json
-from ast import dump
-from unittest import result
-
 import requests
 from bs4 import BeautifulSoup
 from pokemonNames import pokemonNames
@@ -31,8 +28,16 @@ that site has and returns a integer.
 
 class Ebay_Scrapper():
 
-    def __init__(self) -> None:
-        pass
+    def __init__(self, pokemon) -> None:
+        self.pokemon = pokemon
+
+    def __get_metadata(self, file_name, url, quantity) -> dict:
+        now = datetime.now()
+        date = now.strftime("%Y-%m-%d") 
+        hour = now.strftime("%H:%M:%S")
+        metadata = {"date": date, "hour": hour, "file_name": file_name, "url": url, "quantity": quantity}
+        return metadata
+
 
     def __url_builder(self, poke_name, card_type, foil_type, psa_num) -> list:
         '''Function that return a url for the ebay request
@@ -45,7 +50,7 @@ class Ebay_Scrapper():
         foil_search = foil_type + "+"
         psa_search = "psa+" + str(psa_num)
         object_search = poke_search + card_type_search + foil_search + psa_search
-        url = f"https://www.ebay.com/sch/i.html?_from=R40&_nkw=c{object_search}&_sacat=0&LH_TitleDesc=0&Grade=10&_oaa=1&_dcat=183454&LH_BO=1&rt=nc&LH_Sold=1&LH_Complete=1"
+        url = f"https://www.ebay.com/sch/i.html?_from=R40&_nkw={object_search}&_sacat=0&LH_TitleDesc=0&Grade=10&_oaa=1&_dcat=183454&LH_BO=1&rt=nc&LH_Sold=1&LH_Complete=1"
         object_search = object_search.replace("+", "_")
         return [object_search, url]
 
@@ -115,7 +120,7 @@ class Ebay_Scrapper():
         with open(f'{fileName}.json', 'w') as f:
             json.dump(card_sell_data, f)
 
-    def execution(self, poke_name, card_type, foil_type, psa_num) -> json:
+    def execution(self, card_type, foil_type, psa_num) -> json:
         """ This modules performs a full scrapping of the desire data
             @params: object_search = "charizard+brilliant+star+alt+art+psa10"
 
@@ -124,35 +129,30 @@ class Ebay_Scrapper():
             the amount of pages collecting all the data and returning it as json
         """
 
-        fileName, url = self.__url_builder(poke_name, card_type, foil_type, psa_num)
-        
-        # when this function is called it will check number of pages of sell data
+        file_name, url = self.__url_builder(self.pokemon, card_type, foil_type, psa_num)
         soup = self.__get_soup(url)
+        object_list = []
+
         try:
-            nPages = int(self.__number_pages(soup))
+            number_pages = int(self.__number_pages(soup))
+            if number_pages > 1:
+                url = f"{url}&_pgn="
+                for page in range(1, number_pages + 1):
+                    new_url = f"{url}{page}"
+                    print(new_url)
+                    new_soup = self.__get_soup(new_url)
+                    object_list.extend(self.__parse(new_soup))
         except:
             print("only one page of data is avaliable")
-            object_list = self.__parse(soup)
-            self.__dump_info(object_list, fileName)
-            return object_list
+            object_list.extend(self.__parse(soup))
 
+        metadata = [self.__get_metadata(file_name, url, len(object_list))]
+        object_list.extend(metadata)
+        self.__dump_info(object_list, file_name)
+        return f"Data was scrapped and file creates for {file_name}"
 
-        object_list = []
-        url = f"{url}&_pgn="
-        if nPages > 1:
-            page = 1
-            for page in range(1, nPages + 1):
-                #this current url is for the 1st edition
-                newUrl = f"{url}{page}"
-                print(newUrl)
-                newSoup = self.__get_soup(newUrl)
-                object_list.append(self.__parse(newSoup))
-
-            self.__dump_info(object_list, fileName)
-        return f"Data was scrapped and file creates for {fileName}"
-
-# the first run is to collect data from all 150 pokemonsbase set first edition cards
-#obj = Ebay_Scrapper()
-#result = obj.execution("charizard","vmax", "rainbow", 10)
+#the first run is to collect data from all 150 pokemonsbase set first edition cards
+obj = Ebay_Scrapper("charizard")
+result = obj.execution("vmax", "rainbow", 10)
 
 #print(result)
